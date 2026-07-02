@@ -42,7 +42,7 @@ function App() {
     }
     if (route === 'chords') {
       const rootIdx = noteIndex(appState.selectedRoot)
-      return invertedIntervals.map((interval, i) => {
+      return invertedIntervals.map((interval) => {
         const absIdx = rootIdx + interval
         const note = noteFromIndex(absIdx)
         const octave = appState.startOctave + Math.floor(absIdx / 12) - Math.floor(rootIdx / 12)
