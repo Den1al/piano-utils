@@ -15,7 +15,7 @@ export default function BottomNav({ activeRoute, onNavigate, onCircleToggle }: B
     <>
       <button
         onClick={onCircleToggle}
-        className="fixed bottom-[4rem] sm:bottom-[4.5rem] right-2 sm:right-4 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#1c1c1e] border border-white/[0.08] text-white/60 active:text-white active:bg-[#2c2c2e] transition-colors flex items-center justify-center shadow-lg shadow-black/40"
+        className="fixed top-16 right-3 sm:right-4 z-40 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#1c1c1e] border border-white/[0.08] text-white/60 active:text-white active:bg-[#2c2c2e] transition-colors flex items-center justify-center shadow-lg shadow-black/40"
         title="Circle of Fifths"
       >
         <span className="text-lg">◎</span>
