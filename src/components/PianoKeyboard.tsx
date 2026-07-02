@@ -5,6 +5,7 @@ import { playNoteStart, playNoteStop, preloadAllKeys } from '../audio/synth'
 
 export interface KeyHighlight {
   note: NoteName
+  octave?: number
   color?: string
   label?: string
 }
@@ -41,8 +42,8 @@ export default function PianoKeyboard({
     preloadAllKeys(startOctave, octaves)
   }, [startOctave, octaves])
 
-  function getHighlight(note: NoteName): KeyHighlight | undefined {
-    return highlightedNotes.find((h) => h.note === note)
+  function getHighlight(note: NoteName, octave: number): KeyHighlight | undefined {
+    return highlightedNotes.find((h) => h.note === note && (h.octave == null || h.octave === octave))
   }
 
   const handleKeyDown = useCallback((note: NoteName, octave: number, pointerId: number) => {
@@ -69,10 +70,10 @@ export default function PianoKeyboard({
       <div className="absolute inset-0 flex">
         {Array.from({ length: octaves }, (_, oi) =>
           WHITE_NOTES.map((note) => {
-            const hl = getHighlight(note)
+            const oct = startOctave + oi
+            const hl = getHighlight(note, oct)
             const color = hl?.color ?? '#3b82f6'
             const name = displayNoteName(note, noteNaming)
-            const oct = startOctave + oi
             return (
               <button
                 key={`w-${oct}-${note}`}
@@ -105,12 +106,12 @@ export default function PianoKeyboard({
       {/* Black keys */}
       {Array.from({ length: octaves }, (_, oi) =>
         BLACK_NOTES.map(({ note, boundary }) => {
-          const hl = getHighlight(note)
+          const oct = startOctave + oi
+          const hl = getHighlight(note, oct)
           const color = hl?.color ?? '#3b82f6'
           const left =
             (oi * 7 + boundary) * whiteKeyWidth - blackKeyWidth / 2
           const name = displayNoteName(note, noteNaming)
-          const oct = startOctave + oi
           return (
             <button
               key={`b-${oct}-${note}`}

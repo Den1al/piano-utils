@@ -42,21 +42,22 @@ function App() {
     }
     if (route === 'chords') {
       const rootIdx = noteIndex(appState.selectedRoot)
-      const notes = invertedIntervals.map(interval => noteFromIndex(rootIdx + interval))
-      const intervalLabels = invertedIntervals.map(interval => INTERVAL_LABELS[interval % 12] ?? String(interval))
-      return notes.map((note, i) => ({
-        note,
-        color: INTERVAL_COLORS[intervalLabels[i]] ?? '#3b82f6',
-        label: intervalLabels[i],
-      }))
+      return invertedIntervals.map((interval, i) => {
+        const absIdx = rootIdx + interval
+        const note = noteFromIndex(absIdx)
+        const octave = appState.startOctave + Math.floor(absIdx / 12) - Math.floor(rootIdx / 12)
+        const label = INTERVAL_LABELS[interval % 12] ?? String(interval)
+        return { note, octave, color: INTERVAL_COLORS[label] ?? '#3b82f6', label }
+      })
     }
     if (route === 'arpeggios') {
       const rootIdx = noteIndex(appState.selectedRoot)
-      const arpNotes = twoOctaveIntervals.map(interval => noteFromIndex(rootIdx + interval))
-      return arpNotes.map((note, i) => {
-        const interval = twoOctaveIntervals[i] % 12
-        const label = INTERVAL_LABELS[interval] ?? 'R'
-        return { note, color: INTERVAL_COLORS[label] ?? '#3b82f6', label: String(i + 1) }
+      return twoOctaveIntervals.map((interval, i) => {
+        const absIdx = rootIdx + interval
+        const note = noteFromIndex(absIdx)
+        const octave = appState.startOctave + Math.floor(absIdx / 12) - Math.floor(rootIdx / 12)
+        const label = INTERVAL_LABELS[interval % 12] ?? 'R'
+        return { note, octave, color: INTERVAL_COLORS[label] ?? '#3b82f6', label: String(i + 1) }
       })
     }
     return []
