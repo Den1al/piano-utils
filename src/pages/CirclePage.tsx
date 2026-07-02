@@ -71,7 +71,7 @@ export default function CirclePage({ selectedRoot, onRootChange }: CirclePagePro
   }
 
   return (
-    <div className="flex flex-col gap-6 p-4">
+    <div className="animate-fade-in flex flex-col gap-6 p-4">
       {/* Circle of Fifths */}
       <div className="w-full max-w-[350px] mx-auto">
         <CircleOfFifths selectedKey={selectedRoot} onSelectKey={handleSelectKey} />

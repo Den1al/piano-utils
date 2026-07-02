@@ -50,7 +50,7 @@ export default function ChordsPage({
   }
 
   return (
-    <div className="flex flex-col gap-6 p-4">
+    <div className="animate-fade-in flex flex-col gap-6 p-4">
       {/* Top: ChordSelector */}
       <ChordSelector selected={selectedChord} onSelect={handleChordChange} />
 

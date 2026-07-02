@@ -40,7 +40,7 @@ export default function ScalesPage({
   }))
 
   return (
-    <div className="flex flex-col gap-6 p-4">
+    <div className="animate-fade-in flex flex-col gap-6 p-4">
       {/* Top: ScaleSelector + HandToggle */}
       <div className="flex items-start gap-4">
         <div className="flex-1 min-w-0">

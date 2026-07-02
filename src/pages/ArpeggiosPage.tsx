@@ -47,7 +47,7 @@ export default function ArpeggiosPage({
   const descending = [...arpNotes].reverse()
 
   return (
-    <div className="flex flex-col gap-6 p-4">
+    <div className="animate-fade-in flex flex-col gap-6 p-4">
       {/* Top: ChordSelector + HandToggle */}
       <div className="flex items-start gap-4">
         <div className="flex-1 min-w-0">
