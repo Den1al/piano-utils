@@ -1,5 +1,6 @@
 import Layout from './components/Layout'
 import ScalesPage from './pages/ScalesPage'
+import CirclePage from './pages/CirclePage'
 import { useHashRoute } from './hooks/useHashRoute'
 import { useAppState } from './hooks/useAppState'
 
@@ -24,7 +25,12 @@ function App() {
             onHandChange={appState.setHand}
           />
         )}
-        {route === 'circle' && <div className="text-center text-white/50">Circle of Fifths — coming soon</div>}
+        {route === 'circle' && (
+          <CirclePage
+            selectedRoot={appState.selectedRoot}
+            onRootChange={appState.setSelectedRoot}
+          />
+        )}
         {route === 'chords' && <div className="text-center text-white/50">Chord Reference — coming soon</div>}
         {route === 'arpeggios' && <div className="text-center text-white/50">Arpeggio Patterns — coming soon</div>}
       </div>
