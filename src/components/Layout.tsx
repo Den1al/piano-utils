@@ -8,6 +8,7 @@ interface LayoutProps {
   onRootChange: (note: NoteName) => void
   activeRoute: string
   onNavigate: (route: string) => void
+  onCircleToggle: () => void
   children: ReactNode
 }
 
@@ -16,6 +17,7 @@ export default function Layout({
   onRootChange,
   activeRoute,
   onNavigate,
+  onCircleToggle,
   children,
 }: LayoutProps) {
   return (
@@ -26,7 +28,7 @@ export default function Layout({
         <main className="flex-1 flex flex-col overflow-auto pt-16 pb-20">
           {children}
         </main>
-        <BottomNav activeRoute={activeRoute} onNavigate={onNavigate} />
+        <BottomNav activeRoute={activeRoute} onNavigate={onNavigate} onCircleToggle={onCircleToggle} />
       </div>
     </div>
   )

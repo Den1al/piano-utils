@@ -1,12 +1,15 @@
+import { useEffect } from 'react'
 import PianoKeyboard from '../components/PianoKeyboard'
 import type { KeyHighlight } from '../components/PianoKeyboard'
 import ChordSelector from '../components/ChordSelector'
 import HandToggle from '../components/HandToggle'
+import PageHint from '../components/PageHint'
+import PlayButton from '../components/PlayButton'
 import { noteFromIndex, noteIndex } from '../data/notes'
 import type { NoteName } from '../data/notes'
-import { CHORDS } from '../data/chords'
-
-const ARP_COLORS = ['#3b82f6', '#ec4899', '#14b8a6', '#f59e0b']
+import { CHORDS, INTERVAL_LABELS } from '../data/chords'
+import { INTERVAL_COLORS, CHORD_LEGEND } from '../data/colors'
+import { playIntervalSequence, preloadNotes } from '../audio/synth'
 
 interface ArpeggiosPageProps {
   selectedRoot: NoteName
@@ -26,28 +29,40 @@ export default function ArpeggiosPage({
   const chordDef = CHORDS.find(c => c.name === selectedChord) ?? CHORDS[0]
   const rootIdx = noteIndex(selectedRoot)
 
-  // Compute arpeggio intervals across 2 octaves: original intervals + each interval shifted up 12
   const twoOctaveIntervals = [
     ...chordDef.intervals,
     ...chordDef.intervals.map(i => i + 12),
   ]
 
-  // Map each interval to a note name
+  useEffect(() => {
+    preloadNotes(selectedRoot, twoOctaveIntervals)
+  }, [selectedRoot, selectedChord])
+
   const arpNotes = twoOctaveIntervals.map(interval => noteFromIndex(rootIdx + interval))
 
-  // Build highlights: label with sequence number, color by chord tone position
-  const highlights: KeyHighlight[] = arpNotes.map((note, i) => ({
-    note,
-    color: ARP_COLORS[i % chordDef.intervals.length],
-    label: String(i + 1),
-  }))
+  // Color by interval function (same as chords page), label with sequence number
+  const highlights: KeyHighlight[] = arpNotes.map((note, i) => {
+    const interval = twoOctaveIntervals[i] % 12
+    const label = INTERVAL_LABELS[interval] ?? 'R'
+    return {
+      note,
+      color: INTERVAL_COLORS[label] ?? '#3b82f6',
+      label: String(i + 1),
+    }
+  })
 
-  // Ascending and descending note name sequences
   const ascending = arpNotes
   const descending = [...arpNotes].reverse()
 
+  // Colors for note chips — same interval-based colors
+  function getChipColor(i: number): string {
+    const interval = twoOctaveIntervals[i] % 12
+    const label = INTERVAL_LABELS[interval] ?? 'R'
+    return INTERVAL_COLORS[label] ?? '#3b82f6'
+  }
+
   return (
-    <div className="animate-fade-in flex flex-col gap-6 p-4">
+    <div className="animate-fade-in flex flex-col gap-4 p-4">
       {/* Top: ChordSelector + HandToggle */}
       <div className="flex items-start gap-4">
         <div className="flex-1 min-w-0">
@@ -58,9 +73,24 @@ export default function ArpeggiosPage({
         </div>
       </div>
 
+      {/* Hint */}
+      <PageHint
+        text="Numbers show playing order across 2 octaves. Same chord tones repeat in the second octave."
+        legend={CHORD_LEGEND.slice(0, chordDef.intervals.length)}
+      />
+
       {/* Piano keyboard */}
       <div className="w-full max-w-xl mx-auto">
         <PianoKeyboard highlightedNotes={highlights} octaves={2} />
+      </div>
+
+      {/* Play buttons */}
+      <div className="flex justify-center gap-3">
+        <PlayButton label="Ascending" onPlay={() => playIntervalSequence(selectedRoot, twoOctaveIntervals, 4, 180)} />
+        <PlayButton label="Asc + Desc" onPlay={() => {
+          const descIntervals = [...twoOctaveIntervals].reverse()
+          return playIntervalSequence(selectedRoot, [...twoOctaveIntervals, ...descIntervals], 4, 180)
+        }} />
       </div>
 
       {/* Bottom: Ascending / Descending rows */}
@@ -75,8 +105,8 @@ export default function ArpeggiosPage({
                 key={`asc-${i}`}
                 className="px-3 py-1.5 rounded text-sm font-medium bg-white/10 backdrop-blur border border-white/10 text-white"
                 style={{
-                  borderColor: ARP_COLORS[i % chordDef.intervals.length] + '80',
-                  boxShadow: `0 0 8px ${ARP_COLORS[i % chordDef.intervals.length]}30`,
+                  borderColor: getChipColor(i) + '80',
+                  boxShadow: `0 0 8px ${getChipColor(i)}30`,
                 }}
               >
                 {note}
@@ -90,15 +120,14 @@ export default function ArpeggiosPage({
           </div>
           <div className="flex gap-2 justify-center flex-wrap">
             {descending.map((note, i) => {
-              // Map back to chord tone position for consistent coloring
               const originalIdx = arpNotes.length - 1 - i
               return (
                 <span
                   key={`desc-${i}`}
                   className="px-3 py-1.5 rounded text-sm font-medium bg-white/10 backdrop-blur border border-white/10 text-white"
                   style={{
-                    borderColor: ARP_COLORS[originalIdx % chordDef.intervals.length] + '80',
-                    boxShadow: `0 0 8px ${ARP_COLORS[originalIdx % chordDef.intervals.length]}30`,
+                    borderColor: getChipColor(originalIdx) + '80',
+                    boxShadow: `0 0 8px ${getChipColor(originalIdx)}30`,
                   }}
                 >
                   {note}

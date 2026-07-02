@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import Layout from './components/Layout'
+import CircleOverlay from './components/CircleOverlay'
 import ScalesPage from './pages/ScalesPage'
-import CirclePage from './pages/CirclePage'
 import ChordsPage from './pages/ChordsPage'
 import ArpeggiosPage from './pages/ArpeggiosPage'
 import { useHashRoute } from './hooks/useHashRoute'
@@ -9,6 +10,13 @@ import { useAppState } from './hooks/useAppState'
 function App() {
   const [route, setRoute] = useHashRoute()
   const appState = useAppState()
+  const [circleOpen, setCircleOpen] = useState(false)
+
+  function handleChordFromCircle(quality: string) {
+    appState.setSelectedChord(quality)
+    setCircleOpen(false)
+    setRoute('chords')
+  }
 
   return (
     <Layout
@@ -16,6 +24,7 @@ function App() {
       onRootChange={appState.setSelectedRoot}
       activeRoute={route}
       onNavigate={setRoute}
+      onCircleToggle={() => setCircleOpen(prev => !prev)}
     >
       {route === 'scales' && (
         <div className="p-4">
@@ -27,12 +36,6 @@ function App() {
             onHandChange={appState.setHand}
           />
         </div>
-      )}
-      {route === 'circle' && (
-        <CirclePage
-          selectedRoot={appState.selectedRoot}
-          onRootChange={appState.setSelectedRoot}
-        />
       )}
       {route === 'chords' && (
         <div className="p-4">
@@ -55,6 +58,15 @@ function App() {
             onHandChange={appState.setHand}
           />
         </div>
+      )}
+
+      {circleOpen && (
+        <CircleOverlay
+          selectedRoot={appState.selectedRoot}
+          onRootChange={appState.setSelectedRoot}
+          onChordSelect={handleChordFromCircle}
+          onClose={() => setCircleOpen(false)}
+        />
       )}
     </Layout>
   )

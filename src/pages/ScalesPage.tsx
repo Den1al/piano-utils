@@ -1,12 +1,15 @@
+import { useEffect } from 'react'
 import PianoKeyboard from '../components/PianoKeyboard'
 import type { KeyHighlight } from '../components/PianoKeyboard'
 import ScaleSelector from '../components/ScaleSelector'
 import HandToggle from '../components/HandToggle'
+import PageHint from '../components/PageHint'
+import PlayButton from '../components/PlayButton'
 import { getScaleNotes } from '../data/notes'
 import type { NoteName } from '../data/notes'
 import { SCALES, MAJOR_SCALE_FINGERINGS, getDefaultFingering } from '../data/scales'
-
-const SCALE_COLORS = ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#14b8a6', '#6366f1', '#f97316', '#06b6d4']
+import { SCALE_DEGREE_COLORS, SCALE_LEGEND } from '../data/colors'
+import { playIntervalSequence, preloadNotes } from '../audio/synth'
 
 interface ScalesPageProps {
   selectedRoot: NoteName
@@ -33,14 +36,18 @@ export default function ScalesPage({
 
   const fingers = hand === 'rh' ? fingering.rh : fingering.lh
 
+  useEffect(() => {
+    preloadNotes(selectedRoot, [...scaleDef.intervals, 12])
+  }, [selectedRoot, scaleDef])
+
   const highlights: KeyHighlight[] = scaleNotes.map((note, i) => ({
     note,
-    color: SCALE_COLORS[i % SCALE_COLORS.length],
+    color: SCALE_DEGREE_COLORS[i % SCALE_DEGREE_COLORS.length],
     label: fingers[i] != null ? String(fingers[i]) : undefined,
   }))
 
   return (
-    <div className="animate-fade-in flex flex-col gap-6 p-4">
+    <div className="animate-fade-in flex flex-col gap-4 p-4">
       {/* Top: ScaleSelector + HandToggle */}
       <div className="flex items-start gap-4">
         <div className="flex-1 min-w-0">
@@ -51,20 +58,29 @@ export default function ScalesPage({
         </div>
       </div>
 
+      {/* Hint */}
+      <PageHint
+        text="Numbers on keys show fingering (1 = thumb → 5 = pinky). Colors show scale degrees."
+        legend={SCALE_LEGEND.slice(0, scaleDef.intervals.length)}
+      />
+
       {/* Middle: Piano keyboard */}
       <div className="w-full max-w-xl mx-auto">
         <PianoKeyboard highlightedNotes={highlights} octaves={2} />
       </div>
 
-      {/* Bottom: Note chips */}
+      {/* Play button + Note chips */}
+      <div className="flex justify-center">
+        <PlayButton label="Play Scale" onPlay={() => playIntervalSequence(selectedRoot, [...scaleDef.intervals, 12])} />
+      </div>
       <div className="flex gap-2 justify-center flex-wrap">
         {scaleNotes.map((note, i) => (
           <span
             key={`${note}-${i}`}
             className="px-3 py-1.5 rounded text-sm font-medium bg-white/10 backdrop-blur border border-white/10 text-white"
             style={{
-              borderColor: SCALE_COLORS[i % SCALE_COLORS.length] + '80',
-              boxShadow: `0 0 8px ${SCALE_COLORS[i % SCALE_COLORS.length]}30`,
+              borderColor: SCALE_DEGREE_COLORS[i % SCALE_DEGREE_COLORS.length] + '80',
+              boxShadow: `0 0 8px ${SCALE_DEGREE_COLORS[i % SCALE_DEGREE_COLORS.length]}30`,
             }}
           >
             {note}

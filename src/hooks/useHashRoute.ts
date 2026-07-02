@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 
-const VALID_ROUTES = ['scales', 'circle', 'chords', 'arpeggios'] as const
+const VALID_ROUTES = ['scales', 'chords', 'arpeggios'] as const
 
 function getRouteFromHash(): string {
   const hash = window.location.hash.replace('#', '')

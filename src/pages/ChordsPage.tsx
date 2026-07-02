@@ -1,12 +1,15 @@
+import { useEffect } from 'react'
 import PianoKeyboard from '../components/PianoKeyboard'
 import type { KeyHighlight } from '../components/PianoKeyboard'
 import ChordSelector from '../components/ChordSelector'
 import InversionToggle from '../components/InversionToggle'
+import PageHint from '../components/PageHint'
+import PlayButton from '../components/PlayButton'
 import { noteFromIndex, noteIndex } from '../data/notes'
 import type { NoteName } from '../data/notes'
 import { CHORDS, INTERVAL_LABELS, getInversion } from '../data/chords'
-
-const CHORD_COLORS = ['#3b82f6', '#ec4899', '#14b8a6', '#f59e0b']
+import { INTERVAL_COLORS, CHORD_LEGEND } from '../data/colors'
+import { playChordFromIntervals, preloadNotes } from '../audio/synth'
 
 interface ChordsPageProps {
   selectedRoot: NoteName
@@ -26,18 +29,21 @@ export default function ChordsPage({
   const chordDef = CHORDS.find(c => c.name === selectedChord) ?? CHORDS[0]
   const maxInversion = chordDef.intervals.length - 1
 
-  // Reset inversion if it exceeds the new chord's max
   const safeInversion = inversion > maxInversion ? 0 : inversion
 
   const invertedIntervals = getInversion(chordDef.intervals, safeInversion)
   const rootIdx = noteIndex(selectedRoot)
+
+  useEffect(() => {
+    preloadNotes(selectedRoot, invertedIntervals)
+  }, [selectedRoot, selectedChord, safeInversion])
 
   const notes = invertedIntervals.map(interval => noteFromIndex(rootIdx + interval))
   const intervalLabels = invertedIntervals.map(interval => INTERVAL_LABELS[interval % 12] ?? String(interval))
 
   const highlights: KeyHighlight[] = notes.map((note, i) => ({
     note,
-    color: CHORD_COLORS[i % CHORD_COLORS.length],
+    color: INTERVAL_COLORS[intervalLabels[i]] ?? '#3b82f6',
     label: intervalLabels[i],
   }))
 
@@ -50,7 +56,7 @@ export default function ChordsPage({
   }
 
   return (
-    <div className="animate-fade-in flex flex-col gap-6 p-4">
+    <div className="animate-fade-in flex flex-col gap-4 p-4">
       {/* Top: ChordSelector */}
       <ChordSelector selected={selectedChord} onSelect={handleChordChange} />
 
@@ -63,9 +69,20 @@ export default function ChordsPage({
         />
       </div>
 
+      {/* Hint */}
+      <PageHint
+        text="Labels on keys show intervals. Tap an inversion to shift the voicing."
+        legend={CHORD_LEGEND.slice(0, chordDef.intervals.length)}
+      />
+
       {/* Piano keyboard */}
       <div className="w-full max-w-xl mx-auto">
         <PianoKeyboard highlightedNotes={highlights} octaves={2} />
+      </div>
+
+      {/* Play button */}
+      <div className="flex justify-center">
+        <PlayButton label="Play Chord" onPlay={() => playChordFromIntervals(selectedRoot, invertedIntervals)} />
       </div>
 
       {/* Bottom: Interval breakdown chips */}
@@ -75,8 +92,8 @@ export default function ChordsPage({
             key={`${note}-${i}`}
             className="px-3 py-1.5 rounded text-sm font-medium bg-white/10 backdrop-blur border border-white/10 text-white"
             style={{
-              borderColor: CHORD_COLORS[i % CHORD_COLORS.length] + '80',
-              boxShadow: `0 0 8px ${CHORD_COLORS[i % CHORD_COLORS.length]}30`,
+              borderColor: (INTERVAL_COLORS[intervalLabels[i]] ?? '#3b82f6') + '80',
+              boxShadow: `0 0 8px ${INTERVAL_COLORS[intervalLabels[i]] ?? '#3b82f6'}30`,
             }}
           >
             {note} — {intervalLabels[i]}
