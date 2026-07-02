@@ -11,6 +11,7 @@ interface AppState {
   hand: 'rh' | 'lh'
   inversion: number
   noteNaming: NoteNaming
+  startOctave: number
 }
 
 const DEFAULT_STATE: AppState = {
@@ -20,6 +21,7 @@ const DEFAULT_STATE: AppState = {
   hand: 'rh',
   inversion: 0,
   noteNaming: 'letters',
+  startOctave: 4,
 }
 
 function loadState(): AppState {
@@ -65,6 +67,10 @@ export function useAppState() {
     setState(prev => ({ ...prev, noteNaming }))
   }, [])
 
+  const setStartOctave = useCallback((startOctave: number) => {
+    setState(prev => ({ ...prev, startOctave: Math.max(1, Math.min(6, startOctave)) }))
+  }, [])
+
   const cycleNoteNaming = useCallback(() => {
     setState(prev => {
       const order: NoteNaming[] = ['letters', 'solfege', 'both']
@@ -81,6 +87,7 @@ export function useAppState() {
     setHand,
     setInversion,
     setNoteNaming,
+    setStartOctave,
     cycleNoteNaming,
   }
 }

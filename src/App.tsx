@@ -60,7 +60,7 @@ function App() {
       })
     }
     return []
-  }, [route, appState.selectedRoot, appState.selectedScale, appState.selectedChord, appState.inversion, appState.hand])
+  }, [route, appState.selectedRoot, appState.selectedScale, appState.selectedChord, appState.inversion, appState.hand, appState.startOctave])
 
   useEffect(() => {
     if (route === 'scales') {
@@ -111,6 +111,8 @@ function App() {
       activeRoute={route}
       onNavigate={setRoute}
       onCircleToggle={() => setCircleOpen(prev => !prev)}
+      startOctave={appState.startOctave}
+      onOctaveChange={appState.setStartOctave}
       highlights={highlights}
       hintText={hintText}
       hintLegend={hintLegend}
