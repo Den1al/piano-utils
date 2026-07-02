@@ -5,7 +5,7 @@ import TopBar from './TopBar'
 import BottomNav from './BottomNav'
 import PianoKeyboard from './PianoKeyboard'
 import PageHint from './PageHint'
-import { setSustain } from '../audio/synth'
+import { setSustain, setMuted } from '../audio/synth'
 
 interface LegendItem {
   color: string
@@ -46,9 +46,16 @@ export default function Layout({
   children,
 }: LayoutProps) {
   const [sustain, _setSustain] = useState(false)
+  const [mute, _setMute] = useState(false)
   const toggleSustain = useCallback(() => {
     _setSustain(prev => {
       setSustain(!prev)
+      return !prev
+    })
+  }, [])
+  const toggleMute = useCallback(() => {
+    _setMute(prev => {
+      setMuted(!prev)
       return !prev
     })
   }, [])
@@ -102,6 +109,16 @@ export default function Layout({
               }`}
             >
               Sustain
+            </button>
+            <button
+              onClick={toggleMute}
+              className={`min-h-[28px] px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
+                mute
+                  ? 'bg-red-500/80 text-white'
+                  : 'bg-white/[0.08] text-white/50 active:bg-white/[0.15]'
+              }`}
+            >
+              {mute ? 'Muted' : 'Mute'}
             </button>
           </div>
 

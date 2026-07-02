@@ -154,6 +154,7 @@ function playFallbackTone(ctx: AudioContext, frequency: number, startTime: numbe
 }
 
 const liveNotes = new Map<string, { source: AudioBufferSourceNode; gain: GainNode }>()
+let muted = false
 let sustainOn = false
 const sustainedKeys = new Set<string>()
 
@@ -178,7 +179,21 @@ export function setSustain(on: boolean) {
 
 export function isSustainOn() { return sustainOn }
 
+export function setMuted(on: boolean) {
+  muted = on
+  if (on) {
+    for (const [key, entry] of liveNotes) {
+      try { entry.source.stop() } catch {}
+    }
+    liveNotes.clear()
+    sustainedKeys.clear()
+  }
+}
+
+export function isMuted() { return muted }
+
 export function playNoteStart(note: NoteName, octave: number) {
+  if (muted) return
   const ctx = getAudioContext()
   const key = `${note}${octave}`
   const existing = liveNotes.get(key)
