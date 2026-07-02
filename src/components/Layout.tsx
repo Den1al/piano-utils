@@ -65,30 +65,30 @@ export default function Layout({
             </div>
           </div>
 
-          {/* Keyboard — pinned to bottom, fixed height */}
-          <div className="shrink-0 px-2 sm:px-4 pb-1 h-[35%] sm:h-[calc(50%-8px)] flex gap-1 items-stretch">
-            <div className="shrink-0 flex flex-col justify-center gap-1">
-              <button
-                onClick={() => onOctaveChange(startOctave + 1)}
-                disabled={startOctave >= 6}
-                className="w-8 h-8 rounded-lg bg-white/[0.08] text-white/70 active:bg-white/[0.15] disabled:opacity-30 text-sm font-bold transition-colors"
-              >
-                ▲
-              </button>
-              <div className="text-center text-xs text-white/50 font-medium">
-                C{startOctave}
-              </div>
-              <button
-                onClick={() => onOctaveChange(startOctave - 1)}
-                disabled={startOctave <= 1}
-                className="w-8 h-8 rounded-lg bg-white/[0.08] text-white/70 active:bg-white/[0.15] disabled:opacity-30 text-sm font-bold transition-colors"
-              >
-                ▼
-              </button>
-            </div>
-            <div className="flex-1 min-w-0">
-              <PianoKeyboard highlightedNotes={highlights} octaves={2} startOctave={startOctave} noteNaming={noteNaming} />
-            </div>
+          {/* Octave selector */}
+          <div className="shrink-0 flex items-center justify-center gap-2 px-4 py-0.5">
+            <button
+              onClick={() => onOctaveChange(startOctave - 1)}
+              disabled={startOctave <= 1}
+              className="w-7 h-7 rounded-lg bg-white/[0.08] text-white/70 active:bg-white/[0.15] disabled:opacity-30 text-xs font-bold transition-colors"
+            >
+              ◀
+            </button>
+            <span className="text-xs text-white/50 font-medium min-w-[60px] text-center">
+              C{startOctave}–C{startOctave + 2}
+            </span>
+            <button
+              onClick={() => onOctaveChange(startOctave + 1)}
+              disabled={startOctave >= 6}
+              className="w-7 h-7 rounded-lg bg-white/[0.08] text-white/70 active:bg-white/[0.15] disabled:opacity-30 text-xs font-bold transition-colors"
+            >
+              ▶
+            </button>
+          </div>
+
+          {/* Keyboard — pinned to bottom, fixed height, full width */}
+          <div className="shrink-0 px-2 sm:px-4 pb-1 h-[35%] sm:h-[calc(50%-8px)]">
+            <PianoKeyboard highlightedNotes={highlights} octaves={2} startOctave={startOctave} noteNaming={noteNaming} />
           </div>
         </div>
 
