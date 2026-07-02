@@ -50,7 +50,7 @@ export default function PianoKeyboard({
             return (
               <button
                 key={`w-${startOctave + oi}-${note}`}
-                className="relative flex-1 border border-gray-300/50 rounded-b-lg transition-all duration-200 flex items-end justify-center pb-2 text-sm font-semibold"
+                className="relative flex-1 border border-gray-300/50 rounded-b-lg transition-all duration-200 flex flex-col items-center justify-end pb-1 font-semibold"
                 style={{
                   background: hl
                     ? color
@@ -61,7 +61,8 @@ export default function PianoKeyboard({
                   color: hl ? '#fff' : '#888',
                 }}
               >
-                {hl?.label ?? ''}
+                {hl?.label && <span className="text-sm leading-tight">{hl.label}</span>}
+                <span className={`leading-tight ${hl?.label ? 'text-[10px] opacity-70' : 'text-xs'}`}>{note}</span>
               </button>
             )
           }),
@@ -78,7 +79,7 @@ export default function PianoKeyboard({
           return (
             <button
               key={`b-${startOctave + oi}-${note}`}
-              className="absolute top-0 rounded-b-md transition-all duration-200 flex items-end justify-center pb-1 text-xs font-semibold z-10"
+              className="absolute top-0 rounded-b-md transition-all duration-200 flex flex-col items-center justify-end pb-1 font-semibold z-10"
               style={{
                 left: `${left}%`,
                 width: `${blackKeyWidth}%`,
@@ -92,7 +93,8 @@ export default function PianoKeyboard({
                 color: '#fff',
               }}
             >
-              {hl?.label ?? ''}
+              {hl?.label && <span className="text-xs leading-tight">{hl.label}</span>}
+              <span className={`leading-tight ${hl?.label ? 'text-[9px] opacity-70' : 'text-[10px] opacity-70'}`}>{note}</span>
             </button>
           )
         }),

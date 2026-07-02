@@ -64,7 +64,7 @@ export default function ChordsPage({
       </div>
 
       {/* Piano keyboard */}
-      <div className="w-full max-w-3xl mx-auto">
+      <div className="w-full max-w-xl mx-auto">
         <PianoKeyboard highlightedNotes={highlights} octaves={2} />
       </div>
 

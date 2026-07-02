@@ -29,7 +29,6 @@ export default function CirclePage({ selectedRoot, onRootChange }: CirclePagePro
   const scaleNotes = getScaleNotes(selectedRoot, majorScale.intervals)
   const relativeMinor = RELATIVE_MINORS[selectedRoot]
 
-  // Compute diatonic chords
   const diatonicChords = DIATONIC_CHORD_QUALITIES.map((dq, i) => {
     const chordRootIndex = (noteIndex(selectedRoot) + dq.intervalFromRoot) % 12
     const chordRoot = noteFromIndex(chordRootIndex)
@@ -45,7 +44,6 @@ export default function CirclePage({ selectedRoot, onRootChange }: CirclePagePro
     }
   })
 
-  // Compute highlights
   let highlights: KeyHighlight[]
   if (selectedChordIndex !== null) {
     const chord = diatonicChords[selectedChordIndex]
@@ -71,47 +69,50 @@ export default function CirclePage({ selectedRoot, onRootChange }: CirclePagePro
   }
 
   return (
-    <div className="animate-fade-in flex flex-col gap-6 p-4">
-      {/* Circle of Fifths */}
-      <div className="w-full max-w-[350px] mx-auto">
-        <CircleOfFifths selectedKey={selectedRoot} onSelectKey={handleSelectKey} />
+    <div className="animate-fade-in flex flex-col md:flex-row gap-4 md:gap-8 px-4 py-4 md:items-center md:pt-8">
+      {/* Left side: circle + key info + chord chips */}
+      <div className="flex flex-col items-center gap-3 md:gap-4 md:w-1/2">
+        {/* Circle of Fifths */}
+        <div className="w-[75%] max-w-[280px] md:w-full md:max-w-[380px]">
+          <CircleOfFifths selectedKey={selectedRoot} onSelectKey={handleSelectKey} />
+        </div>
+
+        {/* Key signature info */}
+        <div className="text-center">
+          <p className="text-white text-lg md:text-xl font-semibold">
+            {selectedRoot} Major — {getKeySignatureLabel(selectedRoot)}
+          </p>
+          <p className="text-white/50 text-sm md:text-base">
+            Relative minor: {relativeMinor}m
+          </p>
+        </div>
+
+        {/* Diatonic chords */}
+        <div className="flex gap-1.5 md:gap-2 justify-center flex-wrap">
+          {diatonicChords.map((chord, i) => {
+            const isActive = selectedChordIndex === i
+            return (
+              <button
+                key={chord.numeral}
+                onClick={() => handleChordTap(i)}
+                className="flex flex-col items-center px-2.5 py-1.5 md:px-3 md:py-2 rounded-lg text-sm font-medium backdrop-blur border transition-all duration-200"
+                style={{
+                  background: isActive ? chord.color + '30' : 'rgba(255,255,255,0.06)',
+                  borderColor: isActive ? chord.color + '80' : 'rgba(255,255,255,0.1)',
+                  boxShadow: isActive ? `0 0 12px ${chord.color}30` : 'none',
+                  color: isActive ? '#ffffff' : 'rgba(255,255,255,0.8)',
+                }}
+              >
+                <span className="text-[10px] opacity-60">{chord.numeral}</span>
+                <span className="text-xs md:text-sm">{chord.name}</span>
+              </button>
+            )
+          })}
+        </div>
       </div>
 
-      {/* Key info */}
-      <div className="text-center space-y-1">
-        <p className="text-white text-lg font-semibold">
-          {selectedRoot} Major — {getKeySignatureLabel(selectedRoot)}
-        </p>
-        <p className="text-white/60 text-sm">
-          Relative minor: {relativeMinor}m
-        </p>
-      </div>
-
-      {/* Diatonic chords */}
-      <div className="flex gap-2 justify-center flex-wrap">
-        {diatonicChords.map((chord, i) => {
-          const isActive = selectedChordIndex === i
-          return (
-            <button
-              key={chord.numeral}
-              onClick={() => handleChordTap(i)}
-              className="flex flex-col items-center px-3 py-2 rounded-lg text-sm font-medium backdrop-blur border transition-all duration-200"
-              style={{
-                background: isActive ? chord.color + '30' : 'rgba(255,255,255,0.06)',
-                borderColor: isActive ? chord.color + '80' : 'rgba(255,255,255,0.1)',
-                boxShadow: isActive ? `0 0 12px ${chord.color}30` : 'none',
-                color: isActive ? '#ffffff' : 'rgba(255,255,255,0.8)',
-              }}
-            >
-              <span className="text-xs opacity-60">{chord.numeral}</span>
-              <span>{chord.name}</span>
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Piano keyboard */}
-      <div className="w-full max-w-3xl mx-auto">
+      {/* Right side (bottom on mobile): keyboard */}
+      <div className="w-full md:w-1/2 md:flex md:items-center">
         <PianoKeyboard highlightedNotes={highlights} octaves={2} />
       </div>
     </div>

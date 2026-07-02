@@ -17,8 +17,8 @@ function App() {
       activeRoute={route}
       onNavigate={setRoute}
     >
-      <div className="p-4">
-        {route === 'scales' && (
+      {route === 'scales' && (
+        <div className="p-4">
           <ScalesPage
             selectedRoot={appState.selectedRoot}
             selectedScale={appState.selectedScale}
@@ -26,14 +26,16 @@ function App() {
             hand={appState.hand}
             onHandChange={appState.setHand}
           />
-        )}
-        {route === 'circle' && (
-          <CirclePage
-            selectedRoot={appState.selectedRoot}
-            onRootChange={appState.setSelectedRoot}
-          />
-        )}
-        {route === 'chords' && (
+        </div>
+      )}
+      {route === 'circle' && (
+        <CirclePage
+          selectedRoot={appState.selectedRoot}
+          onRootChange={appState.setSelectedRoot}
+        />
+      )}
+      {route === 'chords' && (
+        <div className="p-4">
           <ChordsPage
             selectedRoot={appState.selectedRoot}
             selectedChord={appState.selectedChord}
@@ -41,8 +43,10 @@ function App() {
             inversion={appState.inversion}
             onInversionChange={appState.setInversion}
           />
-        )}
-        {route === 'arpeggios' && (
+        </div>
+      )}
+      {route === 'arpeggios' && (
+        <div className="p-4">
           <ArpeggiosPage
             selectedRoot={appState.selectedRoot}
             selectedChord={appState.selectedChord}
@@ -50,8 +54,8 @@ function App() {
             hand={appState.hand}
             onHandChange={appState.setHand}
           />
-        )}
-      </div>
+        </div>
+      )}
     </Layout>
   )
 }
