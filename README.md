@@ -1,32 +1,23 @@
-# React + TypeScript + Vite
+# Piano Utils
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A quick-reference web app for piano practice — scales with fingerings, chords with inversions, arpeggios, and an interactive circle of fifths.
 
-Currently, two official plugins are available:
+Built with React, TypeScript, Tailwind CSS, and the Web Audio API. Deployed on GitHub Pages.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Scales** — 14 scale types with RH/LH fingerings, colored by scale degree
+- **Chords** — Triads, 7ths, suspended, extended chords with inversions and interval labels
+- **Arpeggios** — 2-octave patterns with ascending and descending playback
+- **Circle of Fifths** — Floating widget showing key relationships, signatures, and diatonic chords
+- **Audio** — Real piano samples (FluidR3 Grand Piano) with hall reverb
+- **Responsive** — Designed for iPad at the piano, works on any screen
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Development
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Requires Node 22+.
