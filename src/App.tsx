@@ -1,4 +1,5 @@
 import Layout from './components/Layout'
+import ScalesPage from './pages/ScalesPage'
 import { useHashRoute } from './hooks/useHashRoute'
 import { useAppState } from './hooks/useAppState'
 
@@ -14,7 +15,15 @@ function App() {
       onNavigate={setRoute}
     >
       <div className="p-4">
-        {route === 'scales' && <div className="text-center text-white/50">Scale Explorer — coming soon</div>}
+        {route === 'scales' && (
+          <ScalesPage
+            selectedRoot={appState.selectedRoot}
+            selectedScale={appState.selectedScale}
+            onScaleChange={appState.setSelectedScale}
+            hand={appState.hand}
+            onHandChange={appState.setHand}
+          />
+        )}
         {route === 'circle' && <div className="text-center text-white/50">Circle of Fifths — coming soon</div>}
         {route === 'chords' && <div className="text-center text-white/50">Chord Reference — coming soon</div>}
         {route === 'arpeggios' && <div className="text-center text-white/50">Arpeggio Patterns — coming soon</div>}
