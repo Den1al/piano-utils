@@ -13,7 +13,7 @@ interface CircleOverlayProps {
   onClose: () => void
 }
 
-const MIN_WIDTH = 240
+const MIN_WIDTH = 260
 const MAX_WIDTH = 500
 
 function getKeySignatureLabel(key: NoteName): string {
@@ -28,10 +28,10 @@ type Interaction = 'drag' | 'resize'
 export default function CircleOverlay({ selectedRoot, onRootChange, onChordSelect, onClose }: CircleOverlayProps) {
   const relativeMinor = RELATIVE_MINORS[selectedRoot]
   const [pos, setPos] = useState(() => ({
-    x: Math.max(20, window.innerWidth - 300),
+    x: Math.max(20, window.innerWidth - 320),
     y: 80,
   }))
-  const [width, setWidth] = useState(280)
+  const [width, setWidth] = useState(300)
   const [minimized, setMinimized] = useState(false)
   const interactionRef = useRef<{
     type: Interaction
@@ -97,25 +97,25 @@ export default function CircleOverlay({ selectedRoot, onRootChange, onChordSelec
       onPointerUp={handlePointerUp}
     >
       <div
-        className="bg-black/60 backdrop-blur-xl border border-white/15 rounded-2xl shadow-2xl shadow-black/40 relative"
+        className="bg-[rgba(28,28,30,0.85)] backdrop-blur-2xl backdrop-saturate-150 border border-white/[0.1] rounded-2xl shadow-2xl shadow-black/50 relative"
         style={{ width: minimized ? 'auto' : width }}
       >
         {/* Title bar */}
         <div
-          className="flex items-center justify-between px-3 py-2 cursor-grab active:cursor-grabbing border-b border-white/10"
+          className="flex items-center justify-between px-3 py-2 cursor-grab active:cursor-grabbing border-b border-white/[0.06]"
           onPointerDown={handleDragDown}
         >
-          <span className="text-white/70 text-xs font-medium select-none">Circle of Fifths</span>
+          <span className="text-white/60 text-sm font-medium select-none">Circle of Fifths</span>
           <div className="flex gap-1">
             <button
               onClick={() => setMinimized(prev => !prev)}
-              className="text-white/40 hover:text-white/80 w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10 text-xs transition-colors"
+              className="text-white/40 active:text-white/80 min-w-[44px] min-h-[44px] -my-2 flex items-center justify-center text-sm transition-colors"
             >
               {minimized ? '▢' : '—'}
             </button>
             <button
               onClick={onClose}
-              className="text-white/40 hover:text-white/80 w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10 text-sm transition-colors"
+              className="text-white/40 active:text-white/80 min-w-[44px] min-h-[44px] -my-2 flex items-center justify-center text-base transition-colors"
             >
               ×
             </button>
@@ -125,42 +125,38 @@ export default function CircleOverlay({ selectedRoot, onRootChange, onChordSelec
         {!minimized && (
           <>
             <div className="p-3 flex flex-col gap-2">
-              {/* Circle */}
               <div className="w-full">
                 <CircleOfFifths selectedKey={selectedRoot} onSelectKey={onRootChange} />
               </div>
 
-              {/* Key info */}
               <div className="text-center">
                 <p className={`text-white font-semibold ${isLarge ? 'text-base' : 'text-sm'}`}>
                   {selectedRoot} Major — {getKeySignatureLabel(selectedRoot)}
                 </p>
-                <p className={`text-white/40 ${isLarge ? 'text-sm' : 'text-xs'}`}>
+                <p className={`text-white/50 ${isLarge ? 'text-sm' : 'text-xs'}`}>
                   Relative minor: {relativeMinor}m
                 </p>
               </div>
 
-              {/* Diatonic chords */}
               <div className={`flex justify-center flex-wrap ${isLarge ? 'gap-1.5' : 'gap-1'}`}>
                 {diatonicChords.map(chord => (
                   <button
                     key={chord.numeral}
                     onClick={() => onChordSelect?.(chord.quality)}
-                    className={`flex flex-col items-center rounded font-medium border border-white/10 bg-white/5 hover:bg-white/15 transition-all text-white/70 hover:text-white ${isLarge ? 'px-2.5 py-1 text-sm' : 'px-1.5 py-0.5 text-xs'}`}
+                    className={`flex flex-col items-center rounded-lg font-medium border border-white/[0.08] bg-white/[0.06] active:bg-white/[0.12] transition-colors text-white/80 ${isLarge ? 'min-h-[44px] px-3 py-1.5 text-sm' : 'min-h-[40px] px-2 py-1 text-xs'}`}
                   >
-                    <span className={`opacity-50 ${isLarge ? 'text-[10px]' : 'text-[8px]'}`}>{chord.numeral}</span>
-                    <span className={isLarge ? 'text-xs' : 'text-[11px]'}>{chord.name}</span>
+                    <span className={`text-white/40 ${isLarge ? 'text-xs' : 'text-[11px]'}`}>{chord.numeral}</span>
+                    <span className={isLarge ? 'text-sm' : 'text-xs'}>{chord.name}</span>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Resize handle — bottom-right corner */}
             <div
-              className="absolute bottom-0 right-0 w-6 h-6 cursor-se-resize touch-none"
+              className="absolute bottom-0 right-0 w-8 h-8 cursor-se-resize touch-none"
               onPointerDown={handleResizeDown}
             >
-              <svg className="w-4 h-4 absolute bottom-1 right-1 text-white/20" viewBox="0 0 16 16" fill="currentColor">
+              <svg className="w-4 h-4 absolute bottom-1.5 right-1.5 text-white/20" viewBox="0 0 16 16" fill="currentColor">
                 <circle cx="12" cy="12" r="1.5" />
                 <circle cx="7" cy="12" r="1.5" />
                 <circle cx="12" cy="7" r="1.5" />

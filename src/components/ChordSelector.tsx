@@ -24,7 +24,7 @@ export default function ChordSelector({ selected, onSelect }: ChordSelectorProps
     <div className="flex flex-col gap-2">
       {grouped.map(group => (
         <div key={group.label}>
-          <div className="text-xs text-white/40 uppercase tracking-wider mb-1">
+          <div className="text-xs text-white/50 font-medium mb-1">
             {group.label}
           </div>
           <div className="flex flex-wrap gap-1">
@@ -32,10 +32,10 @@ export default function ChordSelector({ selected, onSelect }: ChordSelectorProps
               <button
                 key={chord.name}
                 onClick={() => onSelect(chord.name)}
-                className={`px-2 py-1 rounded text-xs font-medium transition-all whitespace-nowrap ${
+                className={`min-h-[36px] px-3 py-1.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a84ff] ${
                   chord.name === selected
-                    ? 'bg-blue-500/30 border border-blue-400/50 shadow-lg shadow-blue-500/20 text-white'
-                    : 'bg-white/10 backdrop-blur border border-transparent text-white/70 hover:bg-white/20'
+                    ? 'bg-[#0a84ff] text-white'
+                    : 'bg-white/[0.08] text-white/70 active:bg-white/[0.15]'
                 }`}
               >
                 {chord.symbol === '' ? 'Maj' : chord.symbol}

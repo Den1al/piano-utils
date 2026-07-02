@@ -13,10 +13,10 @@ export default function InversionToggle({ inversion, maxInversion, onSelect }: I
         <button
           key={label}
           onClick={() => onSelect(i)}
-          className={`px-3 py-1.5 rounded text-sm font-medium transition-all ${
+          className={`min-h-[36px] px-3 py-1.5 rounded-lg text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a84ff] ${
             inversion === i
-              ? 'bg-blue-500/30 border border-blue-400/50 shadow-lg shadow-blue-500/20 text-white'
-              : 'bg-white/10 backdrop-blur border border-transparent text-white/70 hover:bg-white/20'
+              ? 'bg-[#0a84ff] text-white'
+              : 'bg-white/[0.08] text-white/70 active:bg-white/[0.15]'
           }`}
         >
           {label}

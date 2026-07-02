@@ -13,6 +13,11 @@ dist-ssr
 .vite
 *.local
 
+# Claude Code / Impeccable (local tooling)
+.claude/
+.impeccable/
+PRODUCT.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

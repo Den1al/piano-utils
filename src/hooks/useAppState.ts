@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { NoteName } from '../data/notes'
+import type { NoteNaming } from '../data/notes'
 
 const STORAGE_KEY = 'piano-utils-state'
 
@@ -9,6 +10,7 @@ interface AppState {
   selectedChord: string
   hand: 'rh' | 'lh'
   inversion: number
+  noteNaming: NoteNaming
 }
 
 const DEFAULT_STATE: AppState = {
@@ -17,6 +19,7 @@ const DEFAULT_STATE: AppState = {
   selectedChord: 'Major',
   hand: 'rh',
   inversion: 0,
+  noteNaming: 'letters',
 }
 
 function loadState(): AppState {
@@ -58,6 +61,18 @@ export function useAppState() {
     setState(prev => ({ ...prev, inversion }))
   }, [])
 
+  const setNoteNaming = useCallback((noteNaming: NoteNaming) => {
+    setState(prev => ({ ...prev, noteNaming }))
+  }, [])
+
+  const cycleNoteNaming = useCallback(() => {
+    setState(prev => {
+      const order: NoteNaming[] = ['letters', 'solfege', 'both']
+      const idx = order.indexOf(prev.noteNaming)
+      return { ...prev, noteNaming: order[(idx + 1) % order.length] }
+    })
+  }, [])
+
   return {
     ...state,
     setSelectedRoot,
@@ -65,5 +80,7 @@ export function useAppState() {
     setSelectedChord,
     setHand,
     setInversion,
+    setNoteNaming,
+    cycleNoteNaming,
   }
 }

@@ -22,10 +22,10 @@ export default function PlayButton({ onPlay, label = 'Play' }: PlayButtonProps) 
     <button
       onClick={handleClick}
       disabled={playing}
-      className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium backdrop-blur border transition-all duration-200 ${
+      className={`flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a84ff] ${
         playing
-          ? 'bg-blue-500/30 border-blue-400/50 text-white'
-          : 'bg-white/10 border-white/15 text-white/80 hover:bg-white/20 active:scale-95'
+          ? 'bg-[#0a84ff] text-white'
+          : 'bg-[#1c1c1e] border border-white/[0.08] text-white/80 active:bg-[#2c2c2e]'
       }`}
     >
       <span className="text-base">{playing ? '...' : '▶'}</span>
