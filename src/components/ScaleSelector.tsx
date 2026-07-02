@@ -8,10 +8,11 @@ interface ScaleSelectorProps {
 const CATEGORY_LABELS: Record<string, string> = {
   common: 'Common',
   mode: 'Modes',
+  world: 'World',
   other: 'Other',
 }
 
-const CATEGORY_ORDER = ['common', 'mode', 'other'] as const
+const CATEGORY_ORDER = ['common', 'mode', 'world', 'other'] as const
 
 export default function ScaleSelector({ selected, onSelect }: ScaleSelectorProps) {
   const grouped = CATEGORY_ORDER.map(cat => ({

@@ -1,7 +1,7 @@
 export interface ScaleDefinition {
   name: string
   intervals: number[]
-  category: 'common' | 'mode' | 'other'
+  category: 'common' | 'mode' | 'world' | 'other'
 }
 
 export const SCALES: ScaleDefinition[] = [
@@ -17,6 +17,10 @@ export const SCALES: ScaleDefinition[] = [
   { name: 'Lydian', intervals: [0, 2, 4, 6, 7, 9, 11], category: 'mode' },
   { name: 'Mixolydian', intervals: [0, 2, 4, 5, 7, 9, 10], category: 'mode' },
   { name: 'Locrian', intervals: [0, 1, 3, 5, 6, 8, 10], category: 'mode' },
+  { name: 'Double Harmonic', intervals: [0, 1, 4, 5, 7, 8, 11], category: 'world' },
+  { name: 'Hijaz', intervals: [0, 1, 4, 5, 7, 8, 10], category: 'world' },
+  { name: 'Hungarian Minor', intervals: [0, 2, 3, 6, 7, 8, 11], category: 'world' },
+  { name: 'Mi Sheberach', intervals: [0, 2, 3, 6, 7, 9, 10], category: 'world' },
   { name: 'Whole Tone', intervals: [0, 2, 4, 6, 8, 10], category: 'other' },
   { name: 'Diminished', intervals: [0, 2, 3, 5, 6, 8, 9, 11], category: 'other' },
 ]
