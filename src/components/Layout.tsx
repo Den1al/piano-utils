@@ -1,10 +1,11 @@
-import type { ReactNode } from 'react'
+import { type ReactNode, useState, useCallback } from 'react'
 import type { NoteName, NoteNaming } from '../data/notes'
 import type { KeyHighlight } from './PianoKeyboard'
 import TopBar from './TopBar'
 import BottomNav from './BottomNav'
 import PianoKeyboard from './PianoKeyboard'
 import PageHint from './PageHint'
+import { setSustain } from '../audio/synth'
 
 interface LegendItem {
   color: string
@@ -44,6 +45,14 @@ export default function Layout({
   onOctaveChange,
   children,
 }: LayoutProps) {
+  const [sustain, _setSustain] = useState(false)
+  const toggleSustain = useCallback(() => {
+    _setSustain(prev => {
+      setSustain(!prev)
+      return !prev
+    })
+  }, [])
+
   return (
     <div className="h-full bg-black text-white">
       <div className="flex flex-col h-full">
@@ -65,8 +74,8 @@ export default function Layout({
             </div>
           </div>
 
-          {/* Octave selector */}
-          <div className="shrink-0 flex items-center justify-center gap-2 px-4 py-0.5">
+          {/* Octave selector + Sustain */}
+          <div className="shrink-0 flex items-center justify-center gap-3 px-4 py-0.5">
             <button
               onClick={() => onOctaveChange(startOctave - 1)}
               disabled={startOctave <= 1}
@@ -83,6 +92,16 @@ export default function Layout({
               className="w-7 h-7 rounded-lg bg-white/[0.08] text-white/70 active:bg-white/[0.15] disabled:opacity-30 text-xs font-bold transition-colors"
             >
               ▶
+            </button>
+            <button
+              onClick={toggleSustain}
+              className={`ml-2 min-h-[28px] px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
+                sustain
+                  ? 'bg-[#0a84ff] text-white'
+                  : 'bg-white/[0.08] text-white/50 active:bg-white/[0.15]'
+              }`}
+            >
+              Sustain
             </button>
           </div>
 

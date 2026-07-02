@@ -154,6 +154,29 @@ function playFallbackTone(ctx: AudioContext, frequency: number, startTime: numbe
 }
 
 const liveNotes = new Map<string, { source: AudioBufferSourceNode; gain: GainNode }>()
+let sustainOn = false
+const sustainedKeys = new Set<string>()
+
+export function setSustain(on: boolean) {
+  sustainOn = on
+  if (!on) {
+    for (const key of sustainedKeys) {
+      const entry = liveNotes.get(key)
+      if (entry) {
+        const ctx = getAudioContext()
+        entry.gain.gain.setValueAtTime(entry.gain.gain.value, ctx.currentTime)
+        entry.gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3)
+        setTimeout(() => {
+          try { entry.source.stop() } catch {}
+          liveNotes.delete(key)
+        }, 350)
+      }
+    }
+    sustainedKeys.clear()
+  }
+}
+
+export function isSustainOn() { return sustainOn }
 
 export function playNoteStart(note: NoteName, octave: number) {
   const ctx = getAudioContext()
@@ -200,6 +223,10 @@ export function playNoteStart(note: NoteName, octave: number) {
 
 export function playNoteStop(note: NoteName, octave: number) {
   const key = `${note}${octave}`
+  if (sustainOn) {
+    sustainedKeys.add(key)
+    return
+  }
   const entry = liveNotes.get(key)
   if (!entry) return
   const ctx = getAudioContext()
