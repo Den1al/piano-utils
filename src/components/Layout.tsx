@@ -5,7 +5,7 @@ import TopBar from './TopBar'
 import BottomNav from './BottomNav'
 import PianoKeyboard from './PianoKeyboard'
 import PageHint from './PageHint'
-import { setSustain, setMuted } from '../audio/synth'
+import { setSustain, cutAllSound } from '../audio/synth'
 
 interface LegendItem {
   color: string
@@ -53,8 +53,7 @@ export default function Layout({
     })
   }, [])
   const cutSound = useCallback(() => {
-    setMuted(true)
-    setTimeout(() => setMuted(false), 50)
+    cutAllSound()
   }, [])
 
   return (
