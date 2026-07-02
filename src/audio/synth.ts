@@ -158,7 +158,11 @@ const liveNotes = new Map<string, { source: AudioBufferSourceNode; gain: GainNod
 export function playNoteStart(note: NoteName, octave: number) {
   const ctx = getAudioContext()
   const key = `${note}${octave}`
-  if (liveNotes.has(key)) return
+  const existing = liveNotes.get(key)
+  if (existing) {
+    try { existing.source.stop() } catch {}
+    liveNotes.delete(key)
+  }
 
   const cached = sampleCache.get(noteNameForSample(note, octave))
   const gain = ctx.createGain()
