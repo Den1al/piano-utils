@@ -1,6 +1,7 @@
 import Layout from './components/Layout'
 import ScalesPage from './pages/ScalesPage'
 import CirclePage from './pages/CirclePage'
+import ChordsPage from './pages/ChordsPage'
 import { useHashRoute } from './hooks/useHashRoute'
 import { useAppState } from './hooks/useAppState'
 
@@ -31,7 +32,15 @@ function App() {
             onRootChange={appState.setSelectedRoot}
           />
         )}
-        {route === 'chords' && <div className="text-center text-white/50">Chord Reference — coming soon</div>}
+        {route === 'chords' && (
+          <ChordsPage
+            selectedRoot={appState.selectedRoot}
+            selectedChord={appState.selectedChord}
+            onChordChange={appState.setSelectedChord}
+            inversion={appState.inversion}
+            onInversionChange={appState.setInversion}
+          />
+        )}
         {route === 'arpeggios' && <div className="text-center text-white/50">Arpeggio Patterns — coming soon</div>}
       </div>
     </Layout>
