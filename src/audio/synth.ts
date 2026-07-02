@@ -241,9 +241,12 @@ export function playNoteStop(note: NoteName, octave: number) {
   const ctx = getAudioContext()
   entry.gain.gain.setValueAtTime(entry.gain.gain.value, ctx.currentTime)
   entry.gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3)
+  const capturedEntry = entry
   setTimeout(() => {
-    try { entry.source.stop() } catch {}
-    liveNotes.delete(key)
+    if (liveNotes.get(key) === capturedEntry) {
+      liveNotes.delete(key)
+    }
+    try { capturedEntry.source.stop() } catch {}
   }, 350)
 }
 
