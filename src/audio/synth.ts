@@ -153,6 +153,69 @@ function playFallbackTone(ctx: AudioContext, frequency: number, startTime: numbe
   }
 }
 
+const liveNotes = new Map<string, { source: AudioBufferSourceNode; gain: GainNode }>()
+
+export function playNoteStart(note: NoteName, octave: number) {
+  const ctx = getAudioContext()
+  const key = `${note}${octave}`
+  if (liveNotes.has(key)) return
+
+  const cached = sampleCache.get(noteNameForSample(note, octave))
+  const gain = ctx.createGain()
+  gain.gain.setValueAtTime(0.7, ctx.currentTime)
+
+  if (cached) {
+    const source = ctx.createBufferSource()
+    source.buffer = cached
+    source.connect(gain)
+    if (dryGain && reverbNode) {
+      gain.connect(dryGain)
+      gain.connect(reverbNode)
+    } else {
+      gain.connect(ctx.destination)
+    }
+    source.start()
+    liveNotes.set(key, { source, gain })
+    source.onended = () => liveNotes.delete(key)
+  } else {
+    const freq = 440 * Math.pow(2, (noteIndex(note) - noteIndex('A') + (octave - 4) * 12) / 12)
+    const osc = ctx.createOscillator()
+    osc.type = 'sine'
+    osc.frequency.value = freq
+    osc.connect(gain)
+    if (dryGain) {
+      gain.connect(dryGain)
+    } else {
+      gain.connect(ctx.destination)
+    }
+    osc.start()
+    liveNotes.set(key, { source: osc as unknown as AudioBufferSourceNode, gain })
+    loadSample(note, octave)
+  }
+}
+
+export function playNoteStop(note: NoteName, octave: number) {
+  const key = `${note}${octave}`
+  const entry = liveNotes.get(key)
+  if (!entry) return
+  const ctx = getAudioContext()
+  entry.gain.gain.setValueAtTime(entry.gain.gain.value, ctx.currentTime)
+  entry.gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3)
+  setTimeout(() => {
+    try { entry.source.stop() } catch {}
+    liveNotes.delete(key)
+  }, 350)
+}
+
+export function preloadAllKeys(startOctave = 4, octaves = 2) {
+  const notes: NoteName[] = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+  for (let o = 0; o < octaves; o++) {
+    for (const note of notes) {
+      loadSample(note, startOctave + o)
+    }
+  }
+}
+
 export async function preloadNotes(root: NoteName, intervals: number[], octave = 4) {
   const notes = intervals.map(s => getNoteAndOctave(root, octave, s))
   await Promise.all(notes.map(n => loadSample(n.note, n.octave)))
