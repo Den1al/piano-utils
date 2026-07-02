@@ -185,6 +185,12 @@ export function cutAllSound() {
   liveNotes.clear()
   sustainedKeys.clear()
   stopAll()
+  if (masterGain) {
+    masterGain.disconnect()
+  }
+  if (audioCtx) {
+    setupReverb(audioCtx)
+  }
 }
 
 export function playNoteStart(note: NoteName, octave: number) {
