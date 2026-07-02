@@ -31,7 +31,7 @@ export default function ScaleSelector({ selected, onSelect }: ScaleSelectorProps
               <button
                 key={scale.name}
                 onClick={() => onSelect(scale.name)}
-                className={`min-h-[36px] px-3 py-1.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a84ff] ${
+                className={`min-h-[32px] sm:min-h-[36px] px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0a84ff] ${
                   scale.name === selected
                     ? 'bg-[#0a84ff] text-white'
                     : 'bg-white/[0.08] text-white/70 active:bg-white/[0.15]'

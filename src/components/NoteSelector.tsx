@@ -9,7 +9,7 @@ interface NoteSelectorProps {
 
 export default function NoteSelector({ selected, onSelect, noteNaming = 'letters' }: NoteSelectorProps) {
   return (
-    <div className="flex gap-0.5 overflow-x-auto">
+    <div className="flex gap-0.5 overflow-x-auto scrollbar-none">
       {NOTE_NAMES.map(note => (
         <button
           key={note}

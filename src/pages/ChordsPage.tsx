@@ -28,16 +28,18 @@ export default function ChordsPage({
   }
 
   return (
-    <div className="flex items-start gap-4 px-4 py-2">
-      <div className="flex-1 min-w-0">
-        <ChordSelector selected={selectedChord} onSelect={handleChordChange} />
-      </div>
-      <div className="flex-shrink-0 pt-4">
-        <InversionToggle
-          inversion={safeInversion}
-          maxInversion={maxInversion}
-          onSelect={onInversionChange}
-        />
+    <div className="flex flex-col gap-2 px-3 sm:px-4 py-2">
+      <div className="flex items-start gap-3">
+        <div className="flex-1 min-w-0">
+          <ChordSelector selected={selectedChord} onSelect={handleChordChange} />
+        </div>
+        <div className="flex-shrink-0 pt-4">
+          <InversionToggle
+            inversion={safeInversion}
+            maxInversion={maxInversion}
+            onSelect={onInversionChange}
+          />
+        </div>
       </div>
     </div>
   )

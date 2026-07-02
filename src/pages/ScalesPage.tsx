@@ -15,12 +15,14 @@ export default function ScalesPage({
   onHandChange,
 }: ScalesPageProps) {
   return (
-    <div className="flex items-start gap-4 px-4 py-2">
-      <div className="flex-1 min-w-0">
-        <ScaleSelector selected={selectedScale} onSelect={onScaleChange} />
-      </div>
-      <div className="flex-shrink-0 pt-4">
-        <HandToggle hand={hand} onToggle={onHandChange} />
+    <div className="flex flex-col gap-2 px-3 sm:px-4 py-2">
+      <div className="flex items-start gap-3">
+        <div className="flex-1 min-w-0">
+          <ScaleSelector selected={selectedScale} onSelect={onScaleChange} />
+        </div>
+        <div className="flex-shrink-0 pt-4">
+          <HandToggle hand={hand} onToggle={onHandChange} />
+        </div>
       </div>
     </div>
   )

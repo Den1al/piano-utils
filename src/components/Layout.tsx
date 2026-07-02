@@ -53,7 +53,7 @@ export default function Layout({
 
           {/* Hint + Play — pinned above keyboard */}
           <div className="shrink-0 flex items-center gap-3 px-4 pt-2 pb-3">
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 hidden sm:block">
               <PageHint text={hintText} legend={hintLegend} />
             </div>
             <div className="flex gap-1.5 shrink-0">
@@ -62,7 +62,7 @@ export default function Layout({
           </div>
 
           {/* Keyboard — pinned to bottom, fixed height */}
-          <div className="shrink-0 pl-4 pr-16 pb-1" style={{ height: 'calc(50% - 8px)' }}>
+          <div className="shrink-0 px-2 sm:pl-4 sm:pr-16 pb-1" style={{ height: 'calc(50% - 8px)' }}>
             <PianoKeyboard highlightedNotes={highlights} octaves={2} noteNaming={noteNaming} />
           </div>
         </div>
