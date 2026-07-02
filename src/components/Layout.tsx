@@ -62,7 +62,7 @@ export default function Layout({
           </div>
 
           {/* Keyboard — pinned to bottom, fixed height */}
-          <div className="shrink-0 px-2 sm:pl-4 sm:pr-16 pb-1 h-[35%] sm:h-[calc(50%-8px)]">
+          <div className="shrink-0 px-2 sm:px-4 pb-1 h-[35%] sm:h-[calc(50%-8px)]">
             <PianoKeyboard highlightedNotes={highlights} octaves={2} noteNaming={noteNaming} />
           </div>
         </div>
